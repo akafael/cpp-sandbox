@@ -14,11 +14,11 @@ rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(su
 
 # Compiler definition
 CC:= clang++
-CC_FLAGS:= -Wall -std=c++11
+CC_FLAGS:= -Wall -std=c++17
 
 # Get all source files
-SRC = $(call rwildcard, ${PROJ_ROOT_DIR}/src,*.cpp)
-BIN = $(patsubst %.cpp,%, ${SRC})
+SRC := $(call rwildcard, ${PROJ_ROOT_DIR}/src,*.cpp)
+BIN := $(patsubst %.cpp, %, ${SRC})
 
 # Roles -----------------------------------------------------------------------   
 
