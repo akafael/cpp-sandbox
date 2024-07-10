@@ -15,6 +15,8 @@ rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(su
 # Compiler definition
 CC:= clang++
 CC_FLAGS:= -Wall -std=c++17
+FORMATER:= clang-format
+FORMATER_FLAGS:= -style=file -i
 
 # Get all source files
 SRC := $(call rwildcard, ${PROJ_ROOT_DIR}/src,*.cpp)
@@ -26,9 +28,16 @@ BIN := $(patsubst %.cpp, %, ${SRC})
 .PHONY: build
 build: ${BIN}
 
-# Compile everything
+# Format and Compile everything
 %: %.cpp
+	${FORMATER} ${FORMATER_FLAGS} $< &&\
 	${CC} ${CC_FLAGS} $< -o $@
+
+
+# Format all source files
+.PHONY: format
+format:
+	${FORMATER} ${FORMATER_FLAGS} ${SRC}
 
 # Remove generated files
 .PHONY: clean
