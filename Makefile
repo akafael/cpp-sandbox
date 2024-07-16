@@ -19,8 +19,12 @@ FORMATER:= clang-format
 FORMATER_FLAGS:= -style=file -i
 
 # Get all source files
-SRC := $(call rwildcard, ${PROJ_ROOT_DIR}/src,*.cpp)
-BIN := $(patsubst %.cpp, %, ${SRC})
+SRC_DIR = ${PROJ_ROOT_DIR}/src
+SRC := $(call rwildcard, ${SRC_DIR},*.cpp)
+
+# Define binary output path
+BIN_DIR := ${PROJ_ROOT_DIR}/bin
+BIN := $(patsubst ${SRC_DIR}/%.cpp, ${BIN_DIR}/%, ${SRC})
 
 # Roles -----------------------------------------------------------------------   
 
@@ -29,7 +33,8 @@ BIN := $(patsubst %.cpp, %, ${SRC})
 build: ${BIN}
 
 # Format and Compile everything
-%: %.cpp
+${BIN_DIR}/%: ${SRC_DIR}/%.cpp
+	mkdir -p $(dir $@) &&\
 	${FORMATER} ${FORMATER_FLAGS} $< &&\
 	${CC} ${CC_FLAGS} $< -o $@
 
@@ -42,4 +47,4 @@ format:
 # Remove generated files
 .PHONY: clean
 clean:
-	@rm -fv ${BIN}
+	@rm -frv ${BIN}
